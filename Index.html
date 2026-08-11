@@ -1,1 +1,1167 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shacau Sports AI</title>
 
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+:root{
+    --bg:#07090d;
+    --card:#10141c;
+    --card2:#151b25;
+    --border:#242c38;
+    --text:#f5f7fa;
+    --muted:#8993a3;
+    --green:#20d67a;
+    --yellow:#ffc857;
+    --red:#ff5d6c;
+    --blue:#4d9cff;
+}
+
+body{
+    background:linear-gradient(135deg,#05070a,#0b1018);
+    color:var(--text);
+    min-height:100vh;
+}
+
+header{
+    height:70px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 25px;
+    background:#0a0d12;
+    border-bottom:1px solid var(--border);
+    position:sticky;
+    top:0;
+    z-index:20;
+}
+
+.logo{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    font-size:21px;
+    font-weight:800;
+}
+
+.logo span{
+    background:linear-gradient(135deg,#20d67a,#4d9cff);
+    padding:10px;
+    border-radius:12px;
+}
+
+.status{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    color:var(--green);
+    font-size:13px;
+}
+
+.dot{
+    width:9px;
+    height:9px;
+    border-radius:50%;
+    background:var(--green);
+    box-shadow:0 0 12px var(--green);
+}
+
+.layout{
+    display:flex;
+    min-height:calc(100vh - 70px);
+}
+
+.sidebar{
+    width:240px;
+    background:#090c11;
+    border-right:1px solid var(--border);
+    padding:20px 12px;
+    position:fixed;
+    top:70px;
+    bottom:0;
+    overflow-y:auto;
+}
+
+.nav-title{
+    color:#596474;
+    font-size:11px;
+    text-transform:uppercase;
+    margin:15px 12px 8px;
+}
+
+.nav-btn{
+    width:100%;
+    border:0;
+    background:transparent;
+    color:#aab3c0;
+    text-align:left;
+    padding:13px 14px;
+    border-radius:10px;
+    margin-bottom:5px;
+    cursor:pointer;
+    font-size:14px;
+    transition:.2s;
+}
+
+.nav-btn:hover,
+.nav-btn.active{
+    background:#151b24;
+    color:white;
+}
+
+.nav-btn.active{
+    border-left:3px solid var(--green);
+}
+
+.main{
+    margin-left:240px;
+    width:calc(100% - 240px);
+    padding:25px;
+}
+
+.page{
+    display:none;
+}
+
+.page.active{
+    display:block;
+}
+
+.page-title{
+    font-size:27px;
+    font-weight:800;
+    margin-bottom:7px;
+}
+
+.subtitle{
+    color:var(--muted);
+    margin-bottom:25px;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:15px;
+}
+
+.card{
+    background:linear-gradient(145deg,var(--card),#0c1118);
+    border:1px solid var(--border);
+    border-radius:15px;
+    padding:20px;
+}
+
+.stat-label{
+    color:var(--muted);
+    font-size:13px;
+}
+
+.stat-value{
+    font-size:27px;
+    font-weight:800;
+    margin-top:10px;
+}
+
+.green{
+    color:var(--green);
+}
+
+.yellow{
+    color:var(--yellow);
+}
+
+.red{
+    color:var(--red);
+}
+
+.blue{
+    color:var(--blue);
+}
+
+.section{
+    margin-top:22px;
+}
+
+.section-title{
+    font-size:18px;
+    margin-bottom:14px;
+}
+
+.matches{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:15px;
+}
+
+.match{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:14px;
+    padding:18px;
+}
+
+.league{
+    color:var(--muted);
+    font-size:12px;
+    margin-bottom:12px;
+}
+
+.teams{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    font-weight:bold;
+}
+
+.vs{
+    color:var(--muted);
+    font-size:12px;
+}
+
+.tags{
+    display:flex;
+    gap:7px;
+    flex-wrap:wrap;
+    margin-top:14px;
+}
+
+.tag{
+    background:#18202b;
+    border:1px solid #293342;
+    border-radius:20px;
+    padding:6px 9px;
+    font-size:11px;
+}
+
+.btn{
+    border:0;
+    padding:12px 16px;
+    border-radius:10px;
+    cursor:pointer;
+    font-weight:700;
+    color:#06100b;
+    background:var(--green);
+}
+
+.btn:hover{
+    filter:brightness(1.08);
+}
+
+.btn.secondary{
+    color:white;
+    background:#1b222d;
+    border:1px solid var(--border);
+}
+
+.btn.danger{
+    color:white;
+    background:#531d25;
+}
+
+.form-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:15px;
+}
+
+.form-group{
+    margin-bottom:14px;
+}
+
+label{
+    display:block;
+    color:#aeb7c4;
+    font-size:13px;
+    margin-bottom:7px;
+}
+
+input,
+textarea,
+select{
+    width:100%;
+    background:#080b10;
+    color:white;
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:12px;
+    outline:none;
+}
+
+input:focus,
+textarea:focus,
+select:focus{
+    border-color:var(--green);
+}
+
+textarea{
+    min-height:150px;
+    resize:vertical;
+}
+
+.actions{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-top:10px;
+}
+
+.analysis{
+    margin-top:20px;
+    background:#080b10;
+    border:1px solid var(--border);
+    border-radius:14px;
+    padding:20px;
+    line-height:1.7;
+    white-space:pre-wrap;
+}
+
+.progress{
+    width:100%;
+    height:9px;
+    background:#202631;
+    border-radius:20px;
+    overflow:hidden;
+    margin-top:10px;
+}
+
+.progress-bar{
+    height:100%;
+    width:0;
+    background:var(--green);
+    transition:1s;
+}
+
+.ticket-item{
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+    padding:13px;
+    border-bottom:1px solid var(--border);
+}
+
+.ticket-item:last-child{
+    border-bottom:0;
+}
+
+.remove{
+    color:var(--red);
+    cursor:pointer;
+}
+
+.bank-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:15px;
+}
+
+.big-number{
+    font-size:30px;
+    font-weight:800;
+    margin-top:8px;
+}
+
+.mobile-menu{
+    display:none;
+}
+
+@media(max-width:900px){
+    .sidebar{
+        transform:translateX(-100%);
+        transition:.3s;
+        z-index:50;
+    }
+
+    .sidebar.open{
+        transform:translateX(0);
+    }
+
+    .main{
+        margin-left:0;
+        width:100%;
+        padding:18px;
+    }
+
+    .mobile-menu{
+        display:block;
+        background:#161c25;
+        border:1px solid var(--border);
+        color:white;
+        padding:9px 12px;
+        border-radius:9px;
+        cursor:pointer;
+    }
+
+    .grid,
+    .matches,
+    .form-grid,
+    .bank-grid{
+        grid-template-columns:1fr;
+    }
+
+    header{
+        padding:0 15px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">
+        <button class="mobile-menu" onclick="toggleSidebar()">☰</button>
+        <span>🤖</span>
+        Shacau Sports AI
+    </div>
+
+    <div class="status">
+        <div class="dot"></div>
+        Sistema online
+    </div>
+</header>
+
+<div class="layout">
+
+<aside class="sidebar" id="sidebar">
+
+    <div class="nav-title">Principal</div>
+
+    <button class="nav-btn active" onclick="abrirPagina('dashboard',this)">
+        📊 Dashboard
+    </button>
+
+    <button class="nav-btn" onclick="abrirPagina('futebol',this)">
+        ⚽ Futebol PRO
+    </button>
+
+    <button class="nav-btn" onclick="abrirPagina('analisar',this)">
+        🤖 Analisar Jogo
+    </button>
+
+    <button class="nav-btn" onclick="abrirPagina('bilhete',this)">
+        🎟️ Criar Aposta
+    </button>
+
+    <div class="nav-title">Gestão</div>
+
+    <button class="nav-btn" onclick="abrirPagina('banca',this)">
+        💰 Gestão de Banca
+    </button>
+
+    <button class="nav-btn" onclick="abrirPagina('historico',this)">
+        📚 Histórico
+    </button>
+
+    <div class="nav-title">Sistema</div>
+
+    <button class="nav-btn" onclick="abrirPagina('config',this)">
+        ⚙️ Configurações
+    </button>
+
+</aside>
+
+<main class="main">
+
+<!-- DASHBOARD -->
+
+<section class="page active" id="dashboard">
+
+<h1 class="page-title">Dashboard</h1>
+<p class="subtitle">Central inteligente de análise esportiva.</p>
+
+<div class="grid">
+
+<div class="card">
+<div class="stat-label">Jogos analisados</div>
+<div class="stat-value">0</div>
+</div>
+
+<div class="card">
+<div class="stat-label">Oportunidades</div>
+<div class="stat-value green">0</div>
+</div>
+
+<div class="card">
+<div class="stat-label">Banca</div>
+<div class="stat-value" id="dashBank">R$ 0,00</div>
+</div>
+
+<div class="card">
+<div class="stat-label">ROI</div>
+<div class="stat-value blue">0%</div>
+</div>
+
+</div>
+
+<div class="section">
+
+<h2 class="section-title">Mercados monitorados</h2>
+
+<div class="grid">
+
+<div class="card">
+<div class="stat-label">⚽ Gols</div>
+<div class="stat-value">Over / Under</div>
+</div>
+
+<div class="card">
+<div class="stat-label">🚩 Escanteios</div>
+<div class="stat-value">Linhas</div>
+</div>
+
+<div class="card">
+<div class="stat-label">🟨 Cartões</div>
+<div class="stat-value">Linhas</div>
+</div>
+
+<div class="card">
+<div class="stat-label">🎯 Resultado</div>
+<div class="stat-value">1X2</div>
+</div>
+
+</div>
+</div>
+
+<div class="section">
+
+<h2 class="section-title">Como funciona</h2>
+
+<div class="card">
+
+<p style="color:#aeb7c4;line-height:1.8;">
+Informe os dados da partida na área <b>Analisar Jogo</b>.
+O sistema organiza os indicadores e prepara uma análise
+estruturada para a IA. Utilize as probabilidades como
+estimativas e nunca como garantia de resultado.
+</p>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- FUTEBOL -->
+
+<section class="page" id="futebol">
+
+<h1 class="page-title">Futebol PRO</h1>
+<p class="subtitle">Monte uma análise completa da partida.</p>
+
+<div class="matches">
+
+<div class="match">
+
+<div class="league">Exemplo • Campeonato</div>
+
+<div class="teams">
+<span>🏠 Time A</span>
+<span class="vs">VS</span>
+<span>Time B 🚌</span>
+</div>
+
+<div class="tags">
+<span class="tag">Over 1.5</span>
+<span class="tag">BTTS</span>
+<span class="tag">+8.5 Esc.</span>
+<span class="tag">+3.5 Cartões</span>
+</div>
+
+<br>
+
+<button class="btn" onclick="abrirPaginaPorId('analisar')">
+Analisar partida
+</button>
+
+</div>
+
+<div class="match">
+
+<div class="league">Adicione seus próprios dados</div>
+
+<p style="color:#8993a3;line-height:1.6;">
+Você pode utilizar estatísticas de sites esportivos
+e inserir os números no módulo de análise.
+</p>
+
+<br>
+
+<button class="btn secondary" onclick="abrirPaginaPorId('analisar')">
+Nova análise
+</button>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- ANALISAR -->
+
+<section class="page" id="analisar">
+
+<h1 class="page-title">🤖 Analisar Jogo</h1>
+<p class="subtitle">Preencha os dados para gerar uma análise estruturada.</p>
+
+<div class="card">
+
+<div class="form-grid">
+
+<div>
+
+<div class="form-group">
+<label>Time mandante</label>
+<input id="home" placeholder="Ex.: Flamengo">
+</div>
+
+<div class="form-group">
+<label>Time visitante</label>
+<input id="away" placeholder="Ex.: Palmeiras">
+</div>
+
+<div class="form-group">
+<label>Competição</label>
+<input id="league" placeholder="Ex.: Brasileirão">
+</div>
+
+<div class="form-group">
+<label>Odd principal</label>
+<input id="odd" type="number" step="0.01" placeholder="Ex.: 1.85">
+</div>
+
+</div>
+
+<div>
+
+<div class="form-group">
+<label>Estatísticas / informações da partida</label>
+
+<textarea id="stats" placeholder="Exemplo:
+
+Últimos 5 jogos:
+Mandante: 3V 1E 1D
+Visitante: 2V 2E 1D
+
+Média de gols:
+Mandante: 1.8
+Visitante: 1.4
+
+Média de escanteios:
+Mandante: 5.7
+Visitante: 4.8
+
+Média de cartões:
+Mandante: 2.1
+Visitante: 2.8
+
+Desfalques:
+...
+
+Observações:
+..."></textarea>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="actions">
+
+<button class="btn" onclick="analisarJogo()">
+🤖 Gerar análise
+</button>
+
+<button class="btn secondary" onclick="limparAnalise()">
+Limpar
+</button>
+
+</div>
+
+<div class="analysis" id="resultado">
+
+A análise aparecerá aqui.
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- BILHETE -->
+
+<section class="page" id="bilhete">
+
+<h1 class="page-title">🎟️ Criar Aposta</h1>
+<p class="subtitle">Monte seu bilhete a partir dos mercados analisados.</p>
+
+<div class="card">
+
+<div class="form-grid">
+
+<div class="form-group">
+<label>Jogo</label>
+<input id="betGame" placeholder="Ex.: Flamengo x Palmeiras">
+</div>
+
+<div class="form-group">
+<label>Mercado</label>
+<select id="betMarket">
+<option>Over 1.5 gols</option>
+<option>Over 2.5 gols</option>
+<option>Ambas Marcam</option>
+<option>Over 8.5 escanteios</option>
+<option>Over 3.5 cartões</option>
+<option>Casa vence</option>
+<option>Empate Anula</option>
+<option>Handicap Asiático</option>
+</select>
+</div>
+
+<div class="form-group">
+<label>Odd</label>
+<input id="betOdd" type="number" step="0.01" placeholder="1.80">
+</div>
+
+</div>
+
+<button class="btn" onclick="adicionarAposta()">
++ Adicionar ao bilhete
+</button>
+
+</div>
+
+<div class="section">
+
+<div class="card">
+
+<div id="ticketList">
+<p style="color:#8993a3;">Nenhuma seleção adicionada.</p>
+</div>
+
+<hr style="border-color:#242c38;margin:15px 0;">
+
+<div style="display:flex;justify-content:space-between;">
+<b>Odd total</b>
+<b id="totalOdd" class="green">0.00</b>
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- BANCA -->
+
+<section class="page" id="banca">
+
+<h1 class="page-title">💰 Gestão de Banca</h1>
+<p class="subtitle">Controle seu capital e acompanhe sua evolução.</p>
+
+<div class="bank-grid">
+
+<div class="card">
+<div class="stat-label">Banca atual</div>
+<div class="big-number green" id="bankValue">R$ 0,00</div>
+</div>
+
+<div class="card">
+<div class="stat-label">Valor apostado</div>
+<div class="big-number" id="totalStaked">R$ 0,00</div>
+</div>
+
+<div class="card">
+<div class="stat-label">Lucro / prejuízo</div>
+<div class="big-number blue" id="profit">R$ 0,00</div>
+</div>
+
+</div>
+
+<div class="section">
+
+<div class="card">
+
+<div class="form-group">
+<label>Definir banca</label>
+<input id="bankInput" type="number" step="0.01" placeholder="1000">
+</div>
+
+<button class="btn" onclick="salvarBanca()">
+Salvar banca
+</button>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- HISTORICO -->
+
+<section class="page" id="historico">
+
+<h1 class="page-title">📚 Histórico</h1>
+<p class="subtitle">Registro das suas análises e apostas.</p>
+
+<div class="card">
+
+<div id="history">
+<p style="color:#8993a3;">Nenhum registro ainda.</p>
+</div>
+
+</div>
+
+</section>
+
+
+<!-- CONFIG -->
+
+<section class="page" id="config">
+
+<h1 class="page-title">⚙️ Configurações</h1>
+<p class="subtitle">Configure a integração da inteligência artificial.</p>
+
+<div class="card">
+
+<div class="form-group">
+
+<label>Anthropic API Key</label>
+
+<input
+type="password"
+id="apiKey"
+placeholder="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"
+>
+
+</div>
+
+<div class="form-group">
+
+<label>Modelo</label>
+
+<select id="model">
+<option value="claude-sonnet">Claude Sonnet</option>
+<option value="claude-opus">Claude Opus</option>
+</select>
+
+</div>
+
+<button class="btn" onclick="salvarConfig()">
+Salvar configurações
+</button>
+
+<button class="btn danger" onclick="apagarConfig()">
+Apagar chave
+</button>
+
+<p style="color:#697485;font-size:12px;margin-top:15px;line-height:1.6;">
+⚠️ Não publique uma chave real de API dentro de um HTML
+hospedado publicamente. O ideal é utilizar um backend/proxy
+para proteger sua chave.
+</p>
+
+</div>
+
+</section>
+
+</main>
+</div>
+
+
+<script>
+
+let apostas = JSON.parse(localStorage.getItem("shacau_apostas") || "[]");
+
+function abrirPagina(id, botao){
+
+    document.querySelectorAll(".page").forEach(p=>{
+        p.classList.remove("active");
+    });
+
+    document.getElementById(id).classList.add("active");
+
+    document.querySelectorAll(".nav-btn").forEach(b=>{
+        b.classList.remove("active");
+    });
+
+    if(botao){
+        botao.classList.add("active");
+    }
+
+    document.getElementById("sidebar").classList.remove("open");
+}
+
+function abrirPaginaPorId(id){
+
+    const btn = [...document.querySelectorAll(".nav-btn")]
+        .find(b=>b.getAttribute("onclick")?.includes(id));
+
+    abrirPagina(id,btn);
+}
+
+function toggleSidebar(){
+
+    document.getElementById("sidebar")
+        .classList.toggle("open");
+}
+
+
+function salvarConfig(){
+
+    const key = document.getElementById("apiKey").value.trim();
+    const model = document.getElementById("model").value;
+
+    if(!key){
+
+        alert("Digite uma chave de API.");
+
+        return;
+    }
+
+    localStorage.setItem("anthropic_api_key",key);
+    localStorage.setItem("anthropic_model",model);
+
+    alert("Configuração salva no navegador.");
+}
+
+
+function carregarConfig(){
+
+    const key =
+        localStorage.getItem("anthropic_api_key") || "";
+
+    const model =
+        localStorage.getItem("anthropic_model") ||
+        "claude-sonnet";
+
+    document.getElementById("apiKey").value=key;
+    document.getElementById("model").value=model;
+}
+
+
+function apagarConfig(){
+
+    localStorage.removeItem("anthropic_api_key");
+    localStorage.removeItem("anthropic_model");
+
+    document.getElementById("apiKey").value="";
+
+    alert("Chave removida.");
+}
+
+
+function analisarJogo(){
+
+    const home =
+        document.getElementById("home").value || "Mandante";
+
+    const away =
+        document.getElementById("away").value || "Visitante";
+
+    const league =
+        document.getElementById("league").value || "Competição";
+
+    const odd =
+        parseFloat(document.getElementById("odd").value) || 0;
+
+    const stats =
+        document.getElementById("stats").value;
+
+    if(!stats){
+
+        alert("Insira as estatísticas da partida.");
+
+        return;
+    }
+
+    const resultado =
+        document.getElementById("resultado");
+
+    resultado.innerHTML = "⏳ Processando análise...";
+
+    setTimeout(()=>{
+
+        const prob =
+            odd > 0
+            ? Math.min(95,Math.max(5,(1/odd)*100))
+            : 50;
+
+        let risco =
+            prob >= 65
+            ? "BAIXO/MODERADO"
+            : prob >= 50
+            ? "MODERADO"
+            : "ALTO";
+
+        resultado.innerHTML =
+`ANÁLISE — ${home} x ${away}
+
+Competição: ${league}
+
+━━━━━━━━━━━━━━━━━━━━
+
+📊 MERCADO INFORMADO
+
+Odd: ${odd || "Não informada"}
+
+Probabilidade implícita aproximada:
+${prob.toFixed(1)}%
+
+⚠️ Essa porcentagem é apenas uma referência matemática baseada na odd. Não representa a probabilidade real de vitória.
+
+━━━━━━━━━━━━━━━━━━━━
+
+🎯 NÍVEL DE RISCO
+
+${risco}
+
+━━━━━━━━━━━━━━━━━━━━
+
+📌 DADOS RECEBIDOS
+
+${stats}
+
+━━━━━━━━━━━━━━━━━━━━
+
+🤖 CONCLUSÃO
+
+A análise completa depende da qualidade e atualidade dos dados fornecidos.
+
+Antes de realizar uma aposta, verifique:
+• Escalações
+• Desfalques
+• Forma recente
+• Desempenho casa/fora
+• Média de gols
+• Escanteios
+• Cartões
+• Motivação
+• Contexto da competição
+• Movimentação das odds
+
+🚨 Não existe entrada garantida. Apostas esportivas envolvem risco.`;
+
+        salvarHistorico(home,away,resultado.innerText);
+
+    },800);
+}
+
+
+function limparAnalise(){
+
+    document.getElementById("home").value="";
+    document.getElementById("away").value="";
+    document.getElementById("league").value="";
+    document.getElementById("odd").value="";
+    document.getElementById("stats").value="";
+    document.getElementById("resultado").innerText=
+        "A análise aparecerá aqui.";
+}
+
+
+function adicionarAposta(){
+
+    const game =
+        document.getElementById("betGame").value.trim();
+
+    const market =
+        document.getElementById("betMarket").value;
+
+    const odd =
+        parseFloat(document.getElementById("betOdd").value);
+
+    if(!game || !odd){
+
+        alert("Preencha jogo e odd.");
+
+        return;
+    }
+
+    apostas.push({
+        game,
+        market,
+        odd
+    });
+
+    localStorage.setItem(
+        "shacau_apostas",
+        JSON.stringify(apostas)
+    );
+
+    document.getElementById("betGame").value="";
+    document.getElementById("betOdd").value="";
+
+    renderTicket();
+}
+
+
+function removerAposta(index){
+
+    apostas.splice(index,1);
+
+    localStorage.setItem(
+        "shacau_apostas",
+        JSON.stringify(apostas)
+    );
+
+    renderTicket();
+}
+
+
+function renderTicket(){
+
+    const list =
+        document.getElementById("ticketList");
+
+    if(!apostas.length){
+
+        list.innerHTML =
+            '<p style="color:#8993a3;">Nenhuma seleção adicionada.</p>';
+
+        document.getElementById("totalOdd").innerText="0.00";
+
+        return;
+    }
+
+    let total=1;
+
+    list.innerHTML="";
+
+    apostas.forEach((a,i)=>{
+
+        total*=a.odd;
+
+        list.innerHTML+=`
+        <div class="ticket-item">
+
+            <div>
+                <b>${a.game}</b>
+                <div style="color:#8993a3;font-size:12px;">
+                    ${a.market} • Odd ${a.odd.toFixed(2)}
+                </div>
+            </div>
+
+            <span class="remove"
+                onclick="removerAposta(${i})">
+                ✕
+            </span>
+
+        </div>`;
+    });
+
+    document.getEl
